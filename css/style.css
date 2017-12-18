@@ -1,0 +1,44 @@
+[v-cloak] {
+    display: none;
+  }
+body{ padding:0; margin:0;}
+.el-header {
+    background-color: #B3C0D1;
+    color: #333;
+    text-align: center;
+    line-height: 50px;
+}
+
+.el-aside {
+    background-color: #D3DCE6;
+    color: #333;
+    text-align: center;
+    line-height: 200px;
+   
+}
+
+.el-main {
+    background-color: #E9EEF3;
+    color: #333;
+    text-align: center;
+    height: 500px;
+}
+.breadcrumb{ 
+    height: 50px;
+    line-height: 50px;
+    position: relative;
+}
+.el-breadcrumb{ 
+    height: 50px;
+    line-height: 50px;
+}
+.user-infor{  position: absolute; top: 0; right:0; margin:0;}
+.avtar{ width:50px; height: 50px; border-radius: 50%; overflow: hidden; margin-left:10px; }
+.avtar img{ width:100%;}
+.user-infor li{ float:left;}
+h1{ 
+    height: 50px;
+    line-height: 50px;
+    margin:0;
+    padding:0;
+}
