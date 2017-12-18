@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <div id="app" v-cloak>
+        <el-container>
+            <el-aside width="200px">
+                <h1>
+                    <i class="el-icon-edit"></i>雪托帮后台</h1>
+                <div class="">
+                    <el-menu class="el-menu-vertical-demo" @open="open">
+                        <el-submenu index="1">
+                            <template slot="title">
+                                <i class="el-icon-share"></i>文字管理</template>
+                            <el-menu-item index="1-1">item one</el-menu-item>
+                            <el-menu-item index="1-2">item one</el-menu-item>
+                            <el-menu-item index="1-3">item one</el-menu-item>
+                        </el-submenu>
+                        <el-submenu index="2">
+                            <template slot="title">
+                                <i class="el-icon-share"></i>人员管理</template>
+                            <el-menu-item index="2-1">
+                                <i class="el-icon-menu"></i>
+                                <span>Navigator Two</span>
+                            </el-menu-item>
+                            <el-menu-item index="2-2">
+                                <i class="el-icon-setting"></i>
+                                <span>Navigator Three</span>
+                            </el-menu-item>
+                        </el-submenu>
+                        </el-menu-item-group>
+                </div>
+            </el-aside>
+            <el-container>
+                <el-header>
+                    <el-col :span="20">
+                        <div class="breadcrumb">
+                            <el-breadcrumb separator="/">
+                                <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+                                <el-breadcrumb-item>concode</el-breadcrumb-item>
+                                <el-breadcrumb-item>文章管理</el-breadcrumb-item>
+                                <el-breadcrumb-item>列表</el-breadcrumb-item>
+                            </el-breadcrumb>
+                        </div>
+                    </el-col>
+                    <el-col :span="4">
+                        <el-dropdown>
+                            <el-button type="primary">
+                                <div class="avtar">
+                                    <img src="images/pic.jpg" alt="">
+                                </div>
+                            </el-button>
+                            <el-dropdown-menu slot="dropdown">
+                                <el-dropdown-item>Action 1</el-dropdown-item>
+                                <el-dropdown-item>Action 2</el-dropdown-item>
+                                <el-dropdown-item>Action 3</el-dropdown-item>
+                                <el-dropdown-item>Action 4</el-dropdown-item>
+                                <el-dropdown-item>Action 5</el-dropdown-item>
+                            </el-dropdown-menu>
+                        </el-dropdown>
+                    </el-col>
+                </el-header>
+                <el-main>
+                    <template >
+                        <el-table :data="tableData" stripe style="width: 100%">
+                            <el-table-column prop="create_at" label="时间" width="180">
+                                <template slot-scope="scope">
+                                    <i class="el-icon-service"></i>
+                                    {{scope.row.create_at}}
+                                </template>
+                            </el-table-column>
+                            <el-table-column prop="title" label="标题" width="180">
+                            </el-table-column>
+                            <el-table-column prop="visit_count" label="访问数">
+                            </el-table-column>
+                            <el-table-column prop="" label="操作">
+                                    <template slot-scope="scope">
+                                            <el-button @click="edit(scope.$index)" type="text" size="small">编辑</el-button>
+                                            <el-button type="text" @click="del(scope.$index)" size="small">删除</el-button>
+                                          </template>
+                            </el-table-column>
+                        </el-table>
+                    </template>
+
+                </el-main>
+                <el-footer>
+                    <div class="block">
+                        <el-pagination
+                         @size-change="changeSize" //改变当前显示信息条数
+                         @current-change="changeCurrent"  改变当前页码
+                         :current-page="activePage"   读取当前页码
+                         :page-size="activePageSize" 读取当前可显示的信息条数
+                         layout="total, sizes, prev, pager, next, jumper" 
+                         :total="200">
+                        </el-pagination>
+                    </div>
+                </el-footer>
+            </el-container>
+        </el-container>
+    </div>
+
+    <script src="https://vuejs.org/js/vue.js"></script>
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+        vm = new Vue({
+            el: '#app',
+            data:{
+                tableData: [],
+                activePage:1,
+                activePageSize:5,
+
+            },
+            mounted: function () {//钩子函数
+                this.getList()
+            },
+            methods: {
+                open(key) {
+                    this.$alert(key);
+                },
+                getList:function() {
+
+                    axios.get('https://cnodejs.org/api/v1/topics',({
+                        params:{
+                            page:this.activePage,
+                            limit:this.activePageSize,
+                        }
+                    })).then(function (response) {
+
+                            console.log(response.data.data);
+                            this.tableData = response.data.data;
+
+
+                        }.bind(this));
+
+
+                },
+                changeSize:function(size){
+                    this.activePage = size;
+                },
+                changeCurrent:function(page){
+                    this.activePageSize= page;
+                }, 
+                del:function(index){
+                    this.$confirm('你是否删除？', '', {
+                        confirmButtonText: '删除',
+                        cancelButtonText: '取消',
+                        type: 'warning'
+                    }).then(() => {
+                        this.tableData.splice(index,1);
+                    }).catch(() => {});
+                },
+                edit:function(){
+
+                }
+                
+            },
+            watch:{
+
+                
+                activePage:function(){
+                  
+                   this.getList();
+               },
+               activePageSize:function(){
+                   this.getList();
+               }
+            }
+
+        });
+
+
+
+    </script>
+</body>
+
+</html>
